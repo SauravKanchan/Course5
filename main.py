@@ -4,49 +4,41 @@ import requests
 from time import sleep
 
 
-def AmzonParser(url):
+def amazon_parser(url):
     headers = {
         'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36'}
     page = requests.get(url, headers=headers)
-    while True:
-        sleep(3)
-        try:
-            doc = html.fromstring(page.content)
-            XPATH_NAME = '//*[@id="productTitle"]/text()'
-            XPATH_SALE_PRICE = '//*[@id="priceblock_dealprice"]/text()'
-            XPATH_ORIGINAL_PRICE = '//*[@id="price"]/table/tbody/tr[1]/td[2]/span[1]/text()'
-            XPATH_CATEGORY = '//*[@id="wayfinding-breadcrumbs_feature_div"]/ul/li[5]/span/a/text()'
-            XPATH_AVAILABILITY = '//*[@id="availability"]/span/text()'
+    doc = html.fromstring(page.content)
+    for i in range(10):
+        RAW_NAME = doc.xpath('//*[@id="productTitle"]/text()')
+        RAW_SALE_PRICE = doc.xpath('//*[@id="priceblock_dealprice"]/text()')
+        RAW_CATEGORY = doc.xpath('//*[@id="wayfinding-breadcrumbs_feature_div"]/ul/li[5]/span/a/text()')
+        RAW_ORIGINAL_PRICE = doc.xpath('//*[@id="price"]/table/tbody/tr[1]/td[2]/span[1]/text()')
+        RAw_AVAILABILITY = doc.xpath('//*[@id="availability"]/span/text()')
+        RAw_DESCRIPTION = doc.xpath('//*[@id="feature-bullets"]/ul/li[2]/span/text()')
 
-            RAW_NAME = doc.xpath(XPATH_NAME)
-            RAW_SALE_PRICE = doc.xpath(XPATH_SALE_PRICE)
-            RAW_CATEGORY = doc.xpath(XPATH_CATEGORY)
-            RAW_ORIGINAL_PRICE = doc.xpath(XPATH_ORIGINAL_PRICE)
-            RAw_AVAILABILITY = doc.xpath(XPATH_AVAILABILITY)
+        NAME = ' '.join(''.join(RAW_NAME).split()) if RAW_NAME else None
+        SALE_PRICE = ' '.join(''.join(RAW_SALE_PRICE).split()).strip() if RAW_SALE_PRICE else None
+        CATEGORY = ' > '.join([i.strip() for i in RAW_CATEGORY]) if RAW_CATEGORY else None
+        ORIGINAL_PRICE = ''.join(RAW_ORIGINAL_PRICE).strip() if RAW_ORIGINAL_PRICE else None
+        AVAILABILITY = ''.join(RAw_AVAILABILITY).strip() if RAw_AVAILABILITY else None
+        DESCRIPTION = ''.join(RAw_DESCRIPTION).strip() if RAw_AVAILABILITY else None
 
-            NAME = ' '.join(''.join(RAW_NAME).split()) if RAW_NAME else None
-            SALE_PRICE = ' '.join(''.join(RAW_SALE_PRICE).split()).strip() if RAW_SALE_PRICE else None
-            CATEGORY = ' > '.join([i.strip() for i in RAW_CATEGORY]) if RAW_CATEGORY else None
-            ORIGINAL_PRICE = ''.join(RAW_ORIGINAL_PRICE).strip() if RAW_ORIGINAL_PRICE else None
-            AVAILABILITY = ''.join(RAw_AVAILABILITY).strip() if RAw_AVAILABILITY else None
-
-            if not ORIGINAL_PRICE:
-                ORIGINAL_PRICE = SALE_PRICE
-
-            if page.status_code != 200:
-                raise ValueError('captha')
-            data = {
-                'NAME': NAME,
-                'SALE_PRICE': SALE_PRICE,
-                'CATEGORY': CATEGORY,
-                'ORIGINAL_PRICE': ORIGINAL_PRICE,
-                'AVAILABILITY': AVAILABILITY,
-                'URL': url,
-            }
-
-            return data
-        except Exception as e:
-            print(e)
+        data = {
+            'NAME': NAME,
+            'SALE_PRICE': SALE_PRICE,
+            'CATEGORY': CATEGORY,
+            'ORIGINAL_PRICE': ORIGINAL_PRICE,
+            'AVAILABILITY': AVAILABILITY,
+            'DESCRIPTION': DESCRIPTION,
+            'URL': url,
+        }
+        if NAME:
+            print(data)
+            break
+        else:
+            print("Attempt remaining",9-i)
+            sleep(2)
 
 
 def ReadAsin():
@@ -62,7 +54,7 @@ def ReadAsin():
     for i in AsinList:
         url = "http://www.amazon.in/dp/" + i
         print("Processing: " + url)
-        extracted_data.append(AmzonParser(url))
+        extracted_data.append(amazon_parser(url))
         sleep(5)
     f = open('data.json', 'w')
     json.dump(extracted_data, f, indent=4)
