@@ -1,42 +1,10 @@
 [
     {
         "NAME": "OnePlus 6T (Mirror Black, 6GB RAM, 128GB Storage)",
-        "SALE_PRICE": null,
-        "CATEGORY": "Electronics > Mobiles & Accessories > Smartphones & Basic Mobiles > Smartphones",
-        "ORIGINAL_PRICE": null,
+        "SALE_PRICE": "34,999.00",
+        "CATEGORY": "Smartphones & Basic Mobiles",
+        "ORIGINAL_PRICE": "34,999.00",
         "AVAILABILITY": "In stock.",
         "URL": "http://www.amazon.in/dp/B07DJD1Y3Q"
-    },
-    {
-        "NAME": null,
-        "SALE_PRICE": null,
-        "CATEGORY": null,
-        "ORIGINAL_PRICE": null,
-        "AVAILABILITY": null,
-        "URL": ""
-    },
-    {
-        "NAME": null,
-        "SALE_PRICE": null,
-        "CATEGORY": null,
-        "ORIGINAL_PRICE": null,
-        "AVAILABILITY": null,
-        "URL": "http://www.amazon.in/dp/B07DJCVTBH"
-    },
-    {
-        "NAME": null,
-        "SALE_PRICE": null,
-        "CATEGORY": null,
-        "ORIGINAL_PRICE": null,
-        "AVAILABILITY": null,
-        "URL": "http://www.amazon.in/dp/B07DJCJBRD"
-    },
-    {
-        "NAME": null,
-        "SALE_PRICE": null,
-        "CATEGORY": null,
-        "ORIGINAL_PRICE": null,
-        "AVAILABILITY": null,
-        "URL": "http://www.amazon.in/dp/B07DJHV6VZ"
     }
 ]

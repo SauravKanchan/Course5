@@ -12,11 +12,11 @@ def AmzonParser(url):
         sleep(3)
         try:
             doc = html.fromstring(page.content)
-            XPATH_NAME = '//h1[@id="title"]//text()'
-            XPATH_SALE_PRICE = '//span[contains(@id,"ourprice") or contains(@id,"saleprice")]/text()'
-            XPATH_ORIGINAL_PRICE = '//td[contains(text(),"List Price") or contains(text(),"M.R.P") or contains(text(),"Price")]/following-sibling::td/text()'
-            XPATH_CATEGORY = '//a[@class="a-link-normal a-color-tertiary"]//text()'
-            XPATH_AVAILABILITY = '//div[@id="availability"]//text()'
+            XPATH_NAME = '//*[@id="productTitle"]/text()'
+            XPATH_SALE_PRICE = '//*[@id="priceblock_dealprice"]/text()'
+            XPATH_ORIGINAL_PRICE = '//*[@id="price"]/table/tbody/tr[1]/td[2]/span[1]/text()'
+            XPATH_CATEGORY = '//*[@id="wayfinding-breadcrumbs_feature_div"]/ul/li[5]/span/a/text()'
+            XPATH_AVAILABILITY = '//*[@id="availability"]/span/text()'
 
             RAW_NAME = doc.xpath(XPATH_NAME)
             RAW_SALE_PRICE = doc.xpath(XPATH_SALE_PRICE)
@@ -52,10 +52,10 @@ def AmzonParser(url):
 def ReadAsin():
     # AsinList = csv.DictReader(open(os.path.join(os.path.dirname(__file__),"Asinfeed.csv")))
     AsinList = ['B07DJD1Y3Q',
-                'B07DJHY82F',
-                'B07DJCVTBH',
-                'B07DJCJBRD',
-                'B07DJHV6VZ',
+                # 'B07DJHY82F',
+                # 'B07DJCVTBH',
+                # 'B07DJCJBRD',
+                # 'B07DJHV6VZ',
                 ]
 
     extracted_data = []
