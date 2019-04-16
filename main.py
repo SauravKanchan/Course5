@@ -1,7 +1,12 @@
 from lxml import html
 import csv, os, json
 import requests
-from time import sleep
+from time import sleep, time
+from pymongo import MongoClient
+
+client = MongoClient('localhost', 27017)
+db = client['course']
+collection = db['one_plus']
 
 
 def amazon_parser(url):
@@ -18,7 +23,8 @@ def amazon_parser(url):
         raw_description = doc.xpath('//*[@id="feature-bullets"]/ul/li[2]/span/text()')
         raw_image = doc.xpath('//*[@id="landingImage"]/@src')
         raw_colour = doc.xpath('//*[@id="variation_color_name"]/div/span/text()')
-        raw_star_rating = doc.xpath('//*[@id="prodDetails"]/div[2]/div[2]/div[1]/div[2]/div/div/table/tbody/tr[2]/td[2]/span/span[1]/a[2]/i/span/text()')
+        raw_star_rating = doc.xpath(
+            '//*[@id="prodDetails"]/div[2]/div[2]/div[1]/div[2]/div/div/table/tbody/tr[2]/td[2]/span/span[1]/a[2]/i/span/text()')
 
         raw_technical_detail = doc.xpath('//*[@id="prodDetails"]/div[2]/div[1]/div[1]/div[2]/div/div/table/tbody/tr/td')
         technical_detail = dict()
@@ -43,36 +49,40 @@ def amazon_parser(url):
             'availablity': availablity,
             'description': description,
             'url': url,
-            # 'image': image,
+            'image': image,
             'colour': colour,
-            'technical_detail':technical_detail,
-            'star':star,
+            'technical_detail': technical_detail,
+            'star': star,
         }
         if name:
-            print(data)
+            # print(data)
             break
         else:
             print("Attempts remaining", 9 - i)
             sleep(3)
+    return data
 
 
 def ReadAsin():
     # AsinList = csv.DictReader(open(os.path.join(os.path.dirname(__file__),"Asinfeed.csv")))
     AsinList = [
-        # 'B07DJD1Y3Q',
+        'B07DJD1Y3Q',
         'B07DJHY82F',
-        # 'B07DJCVTBH',
-        # 'B07DJCJBRD',
-        # 'B07DJHV6VZ',
+        'B07DJCVTBH',
+        'B07DJCJBRD',
+        'B07DJHV6VZ',
     ]
 
     extracted_data = []
-    for i in AsinList:
+    for ind, i in enumerate(AsinList):
         url = "http://www.amazon.in/dp/" + i
         print("Processing: " + url)
-        extracted_data.append(amazon_parser(url))
+        data = amazon_parser(url)
+        data["_id"] = int(time() * 10000000)
+        extracted_data.append(data)
         sleep(5)
     f = open('data.json', 'w')
+    collection.insert_many(extracted_data)
     json.dump(extracted_data, f, indent=4)
 
 
