@@ -1,6 +1,7 @@
 # Custom
-*.json
-*.csv
+data.json
+reviews.csv
+
 
 
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm
