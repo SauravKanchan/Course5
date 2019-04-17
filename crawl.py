@@ -13,7 +13,7 @@ class AmazonReviewsSpider(scrapy.Spider):
     allowed_domains = ['amazon.in']
 
     # Base URL for the MacBook air reviews
-    myBaseUrl = "https://www.amazon.in/OnePlus-Midnight-Black-128GB-Storage/product-reviews/B07DJHY82F/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews"
+    myBaseUrl = "https://www.amazon.in/B07DJHY82F/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews"
     start_urls = []
 
     # Creating list of urls to be scraped by appending page number a the end of base url
@@ -33,7 +33,8 @@ class AmazonReviewsSpider(scrapy.Spider):
 
         # Combining the results
         for review in star_rating:
-            yield {'stars': ''.join(review.xpath('.//text()').extract()),
-                   'comment': ''.join(comments[count].xpath(".//text()").extract())
-                   }
+            yield {
+                'stars': (''.join(review.xpath('.//text()').extract())).replace(" out of 5 stars",""),
+                'comment': (''.join(comments[count].xpath(".//text()").extract())).replace("\n",""),
+            }
             count = count + 1
