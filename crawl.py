@@ -13,11 +13,11 @@ class AmazonReviewsSpider(scrapy.Spider):
     allowed_domains = ['amazon.in']
 
     # Base URL for the MacBook air reviews
-    myBaseUrl = "https://www.amazon.in/B07DJHY82F/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews"
+    myBaseUrl = "https://www.amazon.in/product-reviews/B07DJHY82F/ref=cm_cr_arp_d_paging_btm_next_2?ie=UTF8&reviewerType=all_reviews&pageNumber="
     start_urls = []
 
     # Creating list of urls to be scraped by appending page number a the end of base url
-    for i in range(1, 26):
+    for i in range(1, 300):
         start_urls.append(myBaseUrl + str(i))
 
     # Defining a Scrapy parser
@@ -34,7 +34,7 @@ class AmazonReviewsSpider(scrapy.Spider):
         # Combining the results
         for review in star_rating:
             yield {
-                'stars': (''.join(review.xpath('.//text()').extract())).replace(" out of 5 stars",""),
-                'comment': (''.join(comments[count].xpath(".//text()").extract())).replace("\n",""),
+                'stars': (''.join(review.xpath('.//text()').extract())).replace(" out of 5 stars", ""),
+                'comment': (''.join(comments[count].xpath(".//text()").extract())).replace("\n", ""),
             }
             count = count + 1
