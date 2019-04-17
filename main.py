@@ -64,14 +64,7 @@ def amazon_parser(url):
 
 
 def ReadAsin():
-    # AsinList = csv.DictReader(open(os.path.join(os.path.dirname(__file__),"Asinfeed.csv")))
-    AsinList = [
-        'B07DJD1Y3Q',
-        'B07DJHY82F',
-        'B07DJCVTBH',
-        'B07DJCJBRD',
-        'B07DJHV6VZ',
-    ]
+    AsinList = list(map(lambda x:x.replace('\n',''),list(open(os.path.join(os.path.dirname(__file__),"Asinfeed.csv")))))
 
     extracted_data = []
     for ind, i in enumerate(AsinList):
