@@ -20,7 +20,8 @@ from nltk.stem import WordNetLemmatizer
 
 filename = 'reviews.csv'
 df = pd.read_csv(filename)
-df.drop_duplicates(subset=None, inplace=True)
+df.drop_duplicates(subset=['review_title','reviewer_name','stars','comment'], inplace=True)
+
 X_train, X_test, y_train, y_test = train_test_split(df['comment'],
                                                     df['stars'],
                                                     test_size=.2, random_state=1)
@@ -29,7 +30,7 @@ vect = CountVectorizer()
 
 # tokenize train and test text data
 X_train_dtm = vect.fit_transform(X_train)
-print(("number words in training corpus:", len(vect.get_feature_names())))
+print("number words in training corpus:", len(vect.get_feature_names()))
 
 X_test_dtm = vect.transform(X_test)
 
@@ -91,7 +92,7 @@ nb.fit(X_train_dtm, y_train)
 
 # evaluate model
 y_pred = nb.predict(X_test_dtm)
-eval_predictions(y_test, y_pred)
+# eval_predictions(y_test, y_pred)
 
 # tfidf_vectorizer_2 = TfidfVectorizer(tokenizer=prep_review, min_df=5, max_df=0.8)
 
